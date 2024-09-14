@@ -1,16 +1,30 @@
 ## Hi there 👋
 
-<!--
-**PenginPenPen/PenginPenPen** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+最近はswiftなどの言語を扱っています。
 
-Here are some ideas to get you started:
+---
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+### 📈 Yearly Progress
+
+![Yearly Progress](https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=PenginPenPen&theme=dark)
+
+---
+### 🏆 GitHub Trophies
+
+![GitHub Trophies](https://github-profile-trophy.vercel.app/?username=PenginPenPen&theme=dark&no-bg=true)
+
+---
+### 🚀 GitHub Stats
+
+<div style="display: flex; flex-direction: row; justify-content: space-between; align-items: flex-start;">
+  <a href="https://github.com/PenginPenPen/github-readme-stats">
+    <img src="https://github-readme-stats.vercel.app/api?username=PenginPenPen&count_private=true&show_icons=true&theme=chartreuse-dark" alt="GitHub Stats" width="48%" />
+  </a>
+
+  <a href="https://github.com/PenginPenPen/github-readme-stats">
+    <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=PenginPenPen&langs_count=8&theme=chartreuse-dark" alt="Top Languages" width="48%" />
+  </a>
+</div>
+
+---
+
