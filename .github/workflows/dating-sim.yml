@@ -859,12 +859,13 @@ jobs:
                   ].join('\n'),
                   choices: [],
                 },
+              };
 
 
             // --------------------------
             // Flow control + commands
             // --------------------------
-            const COMMAND = commentBody.trim().toUpperCase();
+
 
             function handleCommand(state) {
               const raw = (commentBody || '').trim();
