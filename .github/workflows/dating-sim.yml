@@ -961,6 +961,7 @@ jobs:
             }
 
             // If comment event: parse choice and advance
+                        // If comment event: parse choice and advance
             if (isCommentEvent) {
               const choice = parseChoice(commentBody);
               if (!choice) return;
@@ -975,27 +976,21 @@ jobs:
                 return;
               }
 
-              // effects
               if (entry.delta) applyDelta(state, entry.delta);
               if (entry.protectKind) addProtect(state, entry.protectKind);
 
-              // next scene
               let nextId = entry.next;
               if (typeof nextId === 'function') nextId = nextId(state);
 
-              // advance
               state.scene = nextId;
 
-              // mark true/ending flags
               markTrueIfAny(state, nextId);
 
-              // auto: if reached a TRUE scene, update progress
-              if (nextId === 'M_TRUE') state.progress.misakiTrue = true;
-              if (nextId === 'H_TRUE') state.progress.hiyoriTrue = true;
-              if (nextId === 'R_TRUE') state.progress.rinTrue = true;
-
-              // Also: if user is at an ending scene, still render it normally.
               await post(renderScene(state, nextId));
               return;
             }
+
+            // どの条件にも当てはまらないイベントは何もしない
+            return;
+
 
