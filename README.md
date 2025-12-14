@@ -1,36 +1,110 @@
-<h2><p align="center">HI👋</p></h2>
+# 👋 Hi, I'm PenginPenPen
+
+最近は **Flutter / Vue / Vite / Firebase** を行ったり来たりしています。
+
+## 🛠 Tech Stack
+- Flutter / Dart  
+- Vue 3 / Vite  
+- Firebase (Auth / Firestore / Hosting)  
+- Git / GitHub  
+
+## 📊 GitHub Stats
+
 <p align="center">
-  <img src="https://img.shields.io/badge/Focus-iOS%20Development-blue?style=for-the-badge&logo=apple" alt="Focus: iOS Development">
-  <img src="https://img.shields.io/badge/Learning-SwiftUI-orange?style=for-the-badge&logo=swift" alt="Learning: SwiftUI">
-  <img src="https://img.shields.io/badge/Passionate%20about-Clean%20Code-green?style=for-the-badge&logo=code-review" alt="Passionate about: Clean Code">
-</p>
- <h2> 📊Statistics</h2>
-<!-- <p align="center">
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=PenginPenPen&theme=dark" alt="GitHub streak stats" width="500">
-</p> -->
-<p align="center">
-  <img src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=PenginPenPen&theme=nord_dark" alt="Yearly Progress" width="100%">
-</p>
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=PenginPenPen&show_icons=true&theme=nord" alt="GitHub Stats" width="48%">
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=PenginPenPen&layout=compact&theme=nord" alt="Top Languages" width="40%">
-</p>
-<h2> 🏆Trophies</h2>
-<p align="center">
-  <img src="https://github-profile-trophy.vercel.app/?username=PenginPenPen&theme=nord&column=4&margin-w=15&margin-h=15" alt="GitHub Trophies">
+  <img src="https://github-readme-stats.vercel.app/api?username=PenginPenPen&show_icons=true&theme=nord" width="48%" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=PenginPenPen&layout=compact&theme=nord" width="40%" />
 </p>
 
-<h2>🛠Technology Stack</h2>
+## 👀 Visitor
+
 <p align="center">
-  <img src="https://img.shields.io/badge/Swift-FA7343?style=for-the-badge&logo=swift&logoColor=white" alt="Swift">
-  <img src="https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=ios&logoColor=white" alt="iOS">
-  <img src="https://img.shields.io/badge/Xcode-147EFB?style=for-the-badge&logo=xcode&logoColor=white" alt="Xcode">
-  <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" alt="Git">
-  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white" alt="Dart">
-  <img src="https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white" alt="Flutter">
+  <img src="https://profile-counter.glitch.me/PenginPenPen/count.svg" />
 </p>
-<h2>👀Visitor Count</h2>
-  <p align="center">
-    <img src="https://profile-counter.glitch.me/{PenginPenPen}/count.svg" alt="PenginPenPen :: Visitor's Count" />
-  </p>
+
+## 💝 Code Love Story 
+
+<p align="center">
+<img src="https://img.shields.io/badge/💕-Dating_Sim-ff69b4?style=for-the-badge" />
+<img src="https://img.shields.io/badge/🎮-Playable_in_Issues-blue?style=for-the-badge" />
+<img src="https://img.shields.io/badge/⭐-3_Heroines-yellow?style=for-the-badge" />
+</p>
+
+#### 登場キャラクター
+
+<table>
+<tr>
+<td width="33%" align="center">
+
+**アリス・コードウェル**<br>
+🧑‍💻 先輩エンジニア
+
+```
+  ∧＿∧
+ (  ･ω･) < コード、見てあげるよ
+ /    つ
+しーJ
+```
+
+優しくて面倒見がいい<br>ペアプロが得意
+
+</td>
+<td width="33%" align="center">
+
+**さくら・デバッグ**<br>
+🌸 同期エンジニア
+
+```
+  ∧＿∧
+ (* ﾟ∀ﾟ) < 一緒にデバッグしよ！
+ /    つ🐛
+しーJ
+```
+
+元気で明るい<br>あなたと一緒に成長
+
+</td>
+<td width="33%" align="center">
+
+**凛・アーキテクト**<br>
+💎 技術リード
+
+```
+  ∧＿∧
+ (  ･_･) < 設計、見直そうか
+ /    つ📐
+しーJ
+```
+
+クールで完璧主義<br>実は優しい一面も
+
+</td>
+</tr>
+</table>
+
+### 🕹️ 遊び方
+
+1. **[New Issue]** ボタンをクリック
+2. タイトルに `[GAME] あなたの名前` と入力
+3. ラベルに `game` を追加
+4. Issue を作成するとゲームスタート！
+5. **コメントで選択肢を選ぶ**（例：`選択肢：A`）
+6. GitHub Actions が自動でストーリーを進めます
+
+<p align="center">
+<a href="../../issues/new?labels=game&title=%5BGAME%5D%20">
+<img src="https://img.shields.io/badge/🎮-ゲームを始める-ff69b4?style=for-the-badge&logo=github" />
+</a>
+</p>
+
+### 🏆 エンディング
+
+- 💕 **True End** - 最高の結末
+- ✨ **Good End** - ハッピーエンド  
+- 😊 **Normal End** - 友好的な関係
+- 😢 **Bad End** - 残念な結末
+
+選択肢によって好感度が変化し、エンディングが分岐します！
+
+<p align="center">
+<sub>Made with ❤️ and ☕ by PenginPenPen</sub>
+</p>
