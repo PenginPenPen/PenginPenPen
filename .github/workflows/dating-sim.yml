@@ -141,6 +141,7 @@ jobs:
                   // For secret rescue condition
                   protectCount: 0,
                   harshCount: 0,
+                  showStatus: false, 
                 },
                 progress: {
                   misakiTrue: false,
@@ -196,8 +197,11 @@ jobs:
                     ``,
                     `（暗転。タイプ音だけが響く）`,
                     ``,
-                    `主人公（モノローグ）`,
+                    `主人公（SESエンジニア／モノローグ）`,
                     `「……まただ」`,
+                    ``,
+                    `所属は協力会社。現場は客先。`,
+                    `名刺の会社名と、Slackのワークスペースが一致しない。`,
                     ``,
                     `画面に赤いログ。`,
                     ``,
@@ -207,13 +211,10 @@ jobs:
                     `\`\`\``,
                     ``,
                     `主人公`,
-                    `「バックアップは……ない」`,
+                    `「——また、守れなかった」`,
                     ``,
-                    `背後に誰かの気配はない。`,
-                    `オフィスは深夜。照明は半分落ちている。`,
-                    ``,
-                    `主人公`,
-                    `「俺は……正しいコードを書いたはずだった」`,
+                    `この現場で守るべきものは、仕様か。品質か。`,
+                    `それとも、誰かの顔色か。`,
                     ``,
                     `（画面ノイズ → 巻き戻し）`,
                   ].join('\n'),
@@ -224,21 +225,22 @@ jobs:
 
                 CH1_START: {
                   text: [
-                    `## Chapter 1：始動`,
+                    `## Chapter 1：Project AURORA 始動`,
                     ``,
                     `朝の会議室。`,
+                    `主人公は“増員枠”として紹介される。`,
                     ``,
-                    `美咲`,
-                    `「今日からProject AURORAを正式に始動します」`,
+                    `美咲（PM）`,
+                    `「今日からProject AURORAを正式に始動します。……そしてこちら、協力会社さんです」`,
                     ``,
-                    `ひより`,
+                    `ひより（UI）`,
                     `「よろしくお願いしますっ！ UI担当の天野ひよりです！」`,
                     ``,
-                    `凛`,
+                    `凛（セキュリティ監査）`,
                     `「……セキュリティ監査、外部から入る水瀬凛」`,
                     ``,
-                    `主人公`,
-                    `（この三人と、俺は仕事をする）`,
+                    `主人公（モノローグ）`,
+                    `（“外部”は俺だけじゃない。なのに、責任の線はいつも曖昧だ）`,
                     ``,
                     `【選択肢①：会議後】`,
                   ].join('\n'),
@@ -263,47 +265,43 @@ jobs:
                   ],
                 },
 
-                  CH2_DAILY: {
-                    text: [
-                      `## Chapter 2：日常と違和感`,
-                      ``,
-                      `深夜。`,
-                      `主人公の席だけ明かりがついている。`,
-                      ``,
-                      `主人公`,
-                      `「……また仕様変更か」`,
-                      ``,
-                      `美咲（疲れた声）`,
-                      `「ごめんなさい。上からの指示で」`,
-                      ``,
-                      `ひより`,
-                      `「デザイン、間に合わなくて……」`,
-                      ``,
-                      `凛`,
-                      `「この実装、穴だらけ。直して」`,
-                      ``,
-                      `主人公`,
-                      `（誰も悪くない。だが、全部が重い）`,
-                      ``,
-                      `【選択肢②：残業】`,
-                    ].join('\n'),
-                    choices: [
-                      { id:'A', text:'残る', delta:{WORK_PRIORITY:+10, MENTAL:-10}, next:'CH3_DISTORT' },
-                      {
-                        id:'B',
-                        text:'帰る（信頼が落ちる）',
-                        next:(st)=>{
-                          const f = st.flags;
-                          const max = Math.max(f.TRUST_MISAKI, f.TRUST_HIYORI, f.TRUST_RIN);
-                          if (max <= 0) { applyDelta(st, {MENTAL:-5}); return 'CH3_DISTORT'; }
-                          if (max === f.TRUST_MISAKI) applyDelta(st, {TRUST_MISAKI:-5});
-                          else if (max === f.TRUST_HIYORI) applyDelta(st, {TRUST_HIYORI:-5});
-                          else applyDelta(st, {TRUST_RIN:-5});
-                          return 'CH3_DISTORT';
-                        }
-                      },
-                    ],
-                  },
+                CH2_DAILY: {
+                  text: [
+                    `## Chapter 2：日常と違和感`,
+                    ``,
+                    `深夜。`,
+                    `“協力会社”の席だけ明かりがついている。`,
+                    ``,
+                    `主人公`,
+                    `「……また仕様変更か」`,
+                    ``,
+                    `美咲（疲れた声）`,
+                    `「ごめんなさい。上が“明日から”って……」`,
+                    ``,
+                    `ひより`,
+                    `「デザイン、間に合わなくて……でも怒られたくなくて……」`,
+                    ``,
+                    `凛`,
+                    `「この実装、穴だらけ。事故る前に直して」`,
+                    ``,
+                    `主人公（モノローグ）`,
+                    `（直すのは俺。責任は“チーム”。評価は“正社員”。）`,
+                    ``,
+                    `【選択肢②：深夜まで残る？】`,
+                  ].join('\n'),
+                  choices: [
+                    { id:'A', text:'残る', delta:{WORK_PRIORITY:+10, MENTAL:-10}, next:'CH3_DISTORT' },
+                    { id:'B', text:'帰る（信頼が落ちる）', next:(st)=>{
+                      const f = st.flags;
+                      const max = Math.max(f.TRUST_MISAKI, f.TRUST_HIYORI, f.TRUST_RIN);
+                      if (max <= 0) { applyDelta(st, {MENTAL:-5}); return 'CH3_DISTORT'; }
+                      if (max === f.TRUST_MISAKI) applyDelta(st, {TRUST_MISAKI:-5});
+                      else if (max === f.TRUST_HIYORI) applyDelta(st, {TRUST_HIYORI:-5});
+                      else applyDelta(st, {TRUST_RIN:-5});
+                      return 'CH3_DISTORT';
+                    }},
+                  ],
+                },
 
                 CH3_DISTORT: {
                   text: [
@@ -712,9 +710,18 @@ jobs:
                   text: [
                     `## 最終エンディング判定`,
                     ``,
-                    `条件：3ヒロイン全TRUE END達成`,
-                    `共通条件：EMPATHY ≥ 70 / MENTAL ≥ 60`,
-                    `救済追加条件：全ルートで「誰かを庇う選択」を優先`,
+                    `（静かな無音。通知音が消える）`,
+                    ``,
+                    `主人公（SESエンジニア／モノローグ）`,
+                    `「現場は終わっても、ログは残る。……選んだ結果も、残る」`,
+                    ``,
+                    `---`,
+                    `### 解放条件（仕様）`,
+                    `- 3ヒロイン全TRUE END達成`,
+                    `- 共通条件：EMPATHY ≥ 70 / MENTAL ≥ 60`,
+                    `- 隠し救済：全ルートで「誰かを庇う選択」を優先（protectCount優勢）`,
+                    ``,
+                    `（※条件が足りない場合は“未解放”になります）`,
                   ].join('\n'),
                   choices: [
                     { id:'A', text:'最終章へ', next:(st)=>{
@@ -726,8 +733,8 @@ jobs:
 
                       const commonOK = (f.EMPATHY >= 70 && f.MENTAL >= 60);
 
-                      // rescue: protectCountがharshCountより十分多い（“優先”を雑に数値化）
-                      const rescueOK = commonOK && (st.meta.protectCount > st.meta.harshCount + 1);
+                      // 「庇う優先」判定：protectがharshより十分多い
+                      const rescueOK = commonOK && ((st.meta?.protectCount ?? 0) > (st.meta?.harshCount ?? 0) + 1);
 
                       if (rescueOK) return 'FINAL_RESCUE';
                       return commonOK ? 'FINAL_GLOOM' : 'FINAL_GLOOM';
@@ -739,38 +746,79 @@ jobs:
                   text: [
                     `## 🔒 最終章は未解放`,
                     ``,
-                    `3ヒロイン全TRUE ENDが必要です。`,
+                    `主人公（SESエンジニア／モノローグ）`,
+                    `「まだ“全員のTRUE”に辿り着いていない。` ,
+                    `　俺は、誰かを救ったつもりで、誰かを置いてきた」`,
                     ``,
-                    `> \`RESET\` で再挑戦 / \`FINAL\` で再判定`,
+                    `---`,
+                    `### いま出来ること`,
+                    `- \`RESET\`：このIssue内で最初からやり直し（踏破フラグは保持）`,
+                    `- 3人のTRUEが揃ったら \`FINAL\`：最終判定へ`,
+                    `- 状態確認：\`STATUS\``,
+                    ``,
+                    `（無音が戻る）`,
                   ].join('\n'),
                   choices: [],
                 },
 
                 FINAL_GLOOM: {
                   text: [
-                    `## 最終エンド①（正史・鬱）`,
-                    `「それでも世界は回る」`,
+                    `## 最終TRUE（正史・鬱）`,
+                    `### 「それでも世界は回る」`,
                     ``,
-                    `主人公は一人。`,
-                    `プロジェクトは別会社に買われる。`,
-                    `ヒロインたちは皆、別の人生へ。`,
+                    `（暗転。タイプ音だけ）`,
                     ``,
-                    `最後の独白`,
-                    `「正しかった。でも、救えなかった」`,
+                    `数週間後。`,
+                    `AURORAは“整理”という名の切り分けをされ、`,
+                    `別会社に譲渡される。`,
                     ``,
-                    `（冒頭のログ画面へ）`,
+                    `主人公（SESエンジニア）`,
+                    `「契約満了です。お疲れさまでした」`,
                     ``,
-                    `— END —`,
+                    `その言葉は、労いに見せかけた切断だ。`,
+                    `現場の机は片づけられ、アカウントは閉じられる。`,
+                    `“外部”は、最後まで外部のままだった。`,
+                    ``,
+                    `美咲は別部署へ。`,
+                    `ひよりは別の国へ。`,
+                    `凛は監査の名の下に、どこかへ消える。`,
+                    ``,
+                    `主人公（モノローグ）`,
+                    `「正しかった。……でも、救えなかった」`,
+                    ``,
+                    `机の上に残ったのは、ログだけ。`,
+                    ``,
+                    `\`\`\``,
+                    `FATAL ERROR`,
+                    `DATA CORRUPTION DETECTED`,
+                    `\`\`\``,
+                    ``,
+                    `主人公`,
+                    `「——また、守れなかった」`,
+                    ``,
+                    `（冒頭の暗転へループするようなノイズ）`,
+                    ``,
+                    `— THE END —`,
+                    ``,
+                    `> \`RESET\` で再挑戦 / \`STATUS\` で状態確認`,
                   ].join('\n'),
                   choices: [],
                 },
 
                 FINAL_RESCUE: {
                   text: [
-                    `## 最終エンド②（隠し救済）`,
-                    `「書き直せないコードはない」`,
+                    `## 最終TRUE（隠し救済）`,
+                    `### 「書き直せないコードはない」`,
+                    ``,
+                    `（無音。少し遅れて、柔らかい生活音）`,
+                    ``,
+                    `半年後。`,
+                    `主人公はエンジニアを辞める。`,
+                    `“SES”という肩書きも、現場という檻も、手放した。`,
                     ``,
                     `小さな工房。`,
+                    `机は古い。椅子も古い。`,
+                    `でも、画面はやけに明るい。`,
                     ``,
                     `子供`,
                     `「先生、これ動かない！」`,
@@ -778,17 +826,40 @@ jobs:
                     `主人公`,
                     `「じゃあ一緒に直そう」`,
                     ``,
-                    `窓の外。`,
-                    `美咲、ひより、凛が時々訪れる。`,
+                    `（キーを打つ音。けれど、焦りの音じゃない）`,
                     ``,
                     `主人公（モノローグ）`,
-                    `「書き直せないコードはない」`,
+                    `「書き直せないコードはない。` ,
+                    `　……たぶん、人も」`,
                     ``,
-                    `— END —`,
+                    `窓の外、夕方。`,
+                    `時々、三人が訪れる。`,
+                    ``,
+                    `美咲`,
+                    `「……ここ、落ち着くね」`,
+                    ``,
+                    `ひより`,
+                    `「先生って呼んでもいいですか？」`,
+                    ``,
+                    `凛`,
+                    `「ログ、まだ見てる？」`,
+                    ``,
+                    `主人公`,
+                    `「必要なぶんだけ」`,
+                    ``,
+                    `凛は、少しだけ笑う。`,
+                    `ひよりは、泣きそうな顔で笑う。`,
+                    `美咲は、ようやく肩の力を抜く。`,
+                    ``,
+                    `（静かに、未来が続いていく）`,
+                    ``,
+                    `— TRUE END (RESCUE) —`,
+                    ``,
+                    `> \`RESET\` で別分岐へ / \`STATUS\` で状態確認`,
                   ].join('\n'),
                   choices: [],
                 },
-              };
+
 
             // --------------------------
             // Flow control + commands
@@ -796,17 +867,40 @@ jobs:
             const COMMAND = commentBody.trim().toUpperCase();
 
             function handleCommand(state) {
-              if (COMMAND === 'RESET') {
-                // keep progress (踏破) but reset flags/scene
+              const raw = (commentBody || '').trim();
+              const up = raw.toUpperCase();
+
+              if (up === 'RESET') {
                 const keep = state.progress;
                 const newState = defaultState();
                 newState.progress = keep;
+                // showStatus は維持したいなら引き継ぐ
+                newState.meta.showStatus = state.meta?.showStatus ?? false;
                 return { state: newState, message: `🔄 リセットしました（踏破フラグは保持）` };
               }
-              if (COMMAND === 'FINAL') {
+
+              if (up === 'FINAL') {
                 state.scene = 'FINAL_GATE';
                 return { state, message: `🏁 最終章判定へ進みます` };
               }
+
+              // ★追加：STATUS
+              // STATUS            -> 今のステータスだけ表示
+              // STATUS ON         -> 今後の本文に常時表示（おすすめしないけど一応）
+              // STATUS OFF        -> 常時非表示
+              if (up === 'STATUS') {
+                const msg = `📊 **Status**\n${renderState(state)}\n\n（常時表示にするなら \`STATUS ON\` / 消すなら \`STATUS OFF\`）`;
+                return { state, message: msg };
+              }
+              if (up === 'STATUS ON') {
+                state.meta.showStatus = true;
+                return { state, message: `✅ Statusの常時表示をONにしました` };
+              }
+              if (up === 'STATUS OFF') {
+                state.meta.showStatus = false;
+                return { state, message: `✅ Statusの常時表示をOFFにしました（必要なときは \`STATUS\`）` };
+              }
+
               return null;
             }
 
@@ -820,18 +914,19 @@ jobs:
 
             function renderScene(state, sceneId) {
               const scene = scenes[sceneId];
-              if (!scene) {
-                return `❌ シーンが見つかりません: ${sceneId}`;
-              }
+              if (!scene) return `❌ シーンが見つかりません: ${sceneId}`;
 
               const choices = scene.choices || [];
               const text = typeof scene.text === 'string' ? scene.text : String(scene.text);
 
               const choicesText = choices.length
                 ? `\n\n━━━━━━━━━━━━━━━━━━━━━━\n\n${choiceBlock(choices)}\n\n━━━━━━━━━━━━━━━━━━━━━━\n\n💬 **コメントで選択してください**（例: \`A\`）`
-                : `\n\n━━━━━━━━━━━━━━━━━━━━━━\n\n💬 **コマンド**: \`RESET\` / \`FINAL\``;
+                : `\n\n━━━━━━━━━━━━━━━━━━━━━━\n\n💬 **コマンド**: \`RESET\` / \`FINAL\` / \`STATUS\``;
 
-              return `${text}\n${renderState(state)}${choicesText}${stateToHidden(state)}`;
+              // ★ここがポイント：showStatus が true の時だけ表示
+              const maybeStatus = state.meta?.showStatus ? `\n${renderState(state)}` : '';
+
+              return `${text}${maybeStatus}${choicesText}${stateToHidden(state)}`;
             }
 
             // --------------------------

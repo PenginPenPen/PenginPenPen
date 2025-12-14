@@ -39,7 +39,7 @@
 🖋️ PM / リードエンジニア
 
 ∧＿∧
-( ･ω･) < 進捗、共有して
+  ( ･ω･) < 進捗、共有して
 / つ🗂️
 しーJ
 
@@ -55,7 +55,7 @@ php-template
 🎨 UI/デザイン
 
 ∧＿∧
-(* ´ω`) < これ…どうかな？
+  (* ´ω`) < これ…どうかな？
 / つ🎨
 しーJ
 
@@ -71,7 +71,7 @@ php-template
 💎 セキュリティ監査 / 技術リード
 
 ∧＿∧
-( ･_･) < ログを見せて
+  ( ･_･) < ログを見せて
 / つ📐
 しーJ
 
@@ -92,21 +92,14 @@ php-template
 4. Issue を作成するとゲームスタート！
 5. **コメントで選択肢を選ぶ**（例：`選択肢：A`）
 6. GitHub Actions が自動でストーリーを進めます
+7. 状態を見たいときは `STATUS`（常時表示は `STATUS ON` / OFFは `STATUS OFF`）
+
 
 <p align="center">
 <a href="../../issues/new?labels=game&title=%5BGAME%5D%20">
 <img src="https://img.shields.io/badge/🎮-ゲームを始める-ff69b4?style=for-the-badge&logo=github" />
 </a>
 </p>
-
-### 🏆 エンディング
-
-- 💕 **True End** - 最高の結末
-- ✨ **Good End** - ハッピーエンド  
-- 😊 **Normal End** - 友好的な関係
-- 😢 **Bad End** - 残念な結末
-
-選択肢によって好感度が変化し、エンディングが分岐します！
 
 <p align="center">
 <sub>Made with ❤️ and ☕ by PenginPenPen</sub>
