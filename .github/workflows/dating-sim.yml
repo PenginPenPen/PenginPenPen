@@ -1,448 +1,385 @@
-# ==============================================
-# 📁 .github/workflows/dating-sim.yml
-# ==============================================
-name: "💝 Code Love Story - Dating Sim Engine"
+# .github/workflows/dating-sim.yml
+name: "💝 Dating Sim Game"
 
 on:
   issues:
-    types: [opened, labeled]
+    types: [opened]
   issue_comment:
     types: [created]
 
+permissions:
+  issues: write
+  contents: read
+
 jobs:
-  game-engine:
+  game:
     runs-on: ubuntu-latest
     if: contains(github.event.issue.labels.*.name, 'game') || startsWith(github.event.issue.title, '[GAME]')
     
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Game Engine
+        uses: actions/github-script@v7
         with:
-          node-version: '18'
-          
-      - name: Install dependencies
-        run: npm install js-yaml
-        
-      - name: Run Game Engine
-        uses: actions/github-script@v6
-        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            const fs = require('fs');
-            const yaml = require('js-yaml');
+            console.log('🎮 Game started!');
             
-            // ========================================
-            // ゲームデータ
-            // ========================================
-            const gameData = {
-              characters: {
-                alice: {
-                  name: "アリス・コードウェル",
-                  role: "先輩エンジニア",
-                  personality: "優しくて面倒見がいい。コードレビューが丁寧。",
-                  favorability: 0,
-                  ascii: `
-            ∧＿∧
-           (  ･ω･)  < コード、見てあげるよ
-           /    つ━☆
-          しーJ   ☆`,
-                  endings: {
-                    bad: "アリスとは距離ができてしまった...",
-                    normal: "アリスと良い同僚関係を築けた！",
-                    good: "アリスとペアプロの最高のパートナーに！💕",
-                    true: "アリスと共同でOSSプロジェクトを立ち上げた！✨"
-                  }
-                },
-                sakura: {
-                  name: "さくら・デバッグ",
-                  role: "同期エンジニア",
-                  personality: "元気で明るい。でもバグに弱い。",
-                  favorability: 0,
-                  ascii: `
-            ∧＿∧
-           (* ﾟ∀ﾟ)  < 一緒にデバッグしよ！
-           /    つ🐛
-          しーJ`,
-                  endings: {
-                    bad: "さくらは他のチームに異動してしまった...",
-                    normal: "さくらと楽しく仕事できた！",
-                    good: "さくらと最強のデバッグコンビに！💕",
-                    true: "さくらと技術書を共著で出版した！📚"
-                  }
-                },
-                rin: {
-                  name: "凛・アーキテクト",
-                  role: "技術リード",
-                  personality: "クールで完璧主義。でも実は優しい。",
-                  favorability: 0,
-                  ascii: `
-            ∧＿∧
-           (  ･_･)  < 設計、見直そうか
-           /    つ📐
-          しーJ`,
-                  endings: {
-                    bad: "凛に認めてもらえなかった...",
-                    normal: "凛から一定の評価を得た",
-                    good: "凛から技術的に認められた！💕",
-                    true: "凛と一緒に新アーキテクチャを設計した！🏗️"
-                  }
-                }
+            const scenes = {
+              start: {
+                text: `# 💝 Code Love Story
+            
+            ━━━━━━━━━━━━━━━━━━━━━━
+            ようこそ、TechStartup社へ！
+            ━━━━━━━━━━━━━━━━━━━━━━
+            
+            あなたは新人エンジニアとして入社した。
+            初出社の朝、オフィスで3人の女性エンジニアと出会う...
+            
+            ---
+            
+            ## 👋 出会い
+            
+            「おはよう！新人さん？」
+            
+            明るい声が聞こえた。振り向くと...
+            
+            \`\`\`
+              ∧＿∧
+             (* ﾟ∀ﾟ)  < 私はさくら！同期だよ
+             /    つ
+            しーJ
+            \`\`\`
+            
+            **さくら・デバッグ** (同期エンジニア)
+            元気で明るい性格。一緒に成長していける！
+            
+            ---
+            
+            その隣には...
+            
+            \`\`\`
+              ∧＿∧
+             (  ･ω･)  < 私はアリス。先輩だよ
+             /    つ
+            しーJ
+            \`\`\`
+            
+            **アリス・コードウェル** (先輩エンジニア)
+            優しくて面倒見がいい。コードレビューが丁寧。
+            
+            ---
+            
+            そして、奥から凛とした女性が...
+            
+            \`\`\`
+              ∧＿∧
+             (  ･_･)  < 凛だ。技術リードをしている
+             /    つ📐
+            しーJ
+            \`\`\`
+            
+            **凛・アーキテクト** (技術リード)
+            クールで完璧主義。でも実は優しい。
+            
+            ━━━━━━━━━━━━━━━━━━━━━━
+            
+            さて、最初に話しかけるのは...？`,
+                choices: [
+                  { id: 'A', text: '😊 さくらに元気よく挨拶', next: 'sakura1' },
+                  { id: 'B', text: '🌟 アリスに丁寧に挨拶', next: 'alice1' },
+                  { id: 'C', text: '💎 凛にしっかり挨拶', next: 'rin1' }
+                ]
               },
               
-              scenes: {
-                start: {
-                  text: `
-# 💝 Code Love Story が始まります
-
-あなたは新人エンジニアとして、
-TechStartup社に入社したばかり。
-
-初出社の朝、オフィスの扉を開けると...
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-「おはよう！新人さんだね？」
-
-明るい声が聞こえた。
-振り向くと、笑顔の女性エンジニアが立っていた。
-
-「私はさくら！同期だよ。よろしくね！」
-
-     ∧＿∧
-    (* ﾟ∀ﾟ)  < 一緒に頑張ろうね！
-    /    つ
-   しーJ
-
-━━━━━━━━━━━━━━━━━━━━━━
-`,
-                  choices: [
-                    { id: "A", text: "元気よく挨拶する", next: "scene1_a", effects: { sakura: 5 } },
-                    { id: "B", text: "落ち着いて自己紹介する", next: "scene1_b", effects: { alice: 3 } },
-                    { id: "C", text: "緊張して小声で答える", next: "scene1_c", effects: {} }
-                  ]
-                },
-                
-                scene1_a: {
-                  text: `
-「よろしくお願いします！早く仕事覚えたいです！」
-
-あなたの元気な挨拶に、さくらの笑顔がさらに輝いた。
-
-「その意気だね！じゃあ、席を案内するよ！」
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-席に着くと、隣の席から声がかかった。
-
-「新人さんね。私はアリス。先輩エンジニアよ。
- わからないことがあったら、いつでも聞いてね」
-
-     ∧＿∧
-    (  ･ω･)  < 環境構築、手伝おうか？
-    /    つ
-   しーJ
-
-━━━━━━━━━━━━━━━━━━━━━━
-`,
-                  choices: [
-                    { id: "A", text: "「お願いします！」と素直に頼む", next: "scene2_alice", effects: { alice: 10 } },
-                    { id: "B", text: "「自分で頑張ってみます」と答える", next: "scene2_solo", effects: { rin: 5 } },
-                    { id: "C", text: "「少しだけ手伝ってください」", next: "scene2_middle", effects: { alice: 5, sakura: 3 } }
-                  ]
-                },
-                
-                scene1_b: {
-                  text: `
-「はじめまして。よろしくお願いします」
-
-落ち着いた自己紹介に、さくらは少し驚いた様子。
-
-「お、しっかりしてるね！頼もしいかも」
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-その時、奥から凛とした雰囲気の女性が現れた。
-
-「新人？私は凛。技術リードをしている。
- コードの品質には厳しいから、覚悟しておいて」
-
-     ∧＿∧
-    (  ･_･)  < まずはコーディング規約を読んで
-    /    つ📄
-   しーJ
-
-━━━━━━━━━━━━━━━━━━━━━━
-`,
-                  choices: [
-                    { id: "A", text: "「はい、しっかり学びます！」", next: "scene2_rin", effects: { rin: 8 } },
-                    { id: "B", text: "「優しく教えてください...」", next: "scene2_shy", effects: { alice: 5 } },
-                    { id: "C", text: "「よろしくお願いします」", next: "scene2_normal", effects: { rin: 3, alice: 3 } }
-                  ]
-                },
-                
-                scene2_alice: {
-                  text: `
-━━━━━━━━━━━━━━━━━━━━━━
-📅 Day 3 - ペアプログラミング
-━━━━━━━━━━━━━━━━━━━━━━
-
-アリスと一緒にコードを書いている。
-
-「ここは... map じゃなくて forEach の方がいいかな」
-
-アリスの指が優雅にキーボードを叩く。
-彼女のコードは読みやすく、美しい。
-
-     ∧＿∧
-    (  ･ω･)  < 君のコード、センスあるね
-    /    つ⌨️
-   しーJ
-
-「ありがとう」と小さく笑う彼女。
-心地よい沈黙が流れる...
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-突然、アリスが立ち上がった。
-
-「そういえば、今度の土曜日...
- 技術書の読書会があるんだけど、来ない？」
-
-━━━━━━━━━━━━━━━━━━━━━━
-`,
-                  choices: [
-                    { id: "A", text: "「ぜひ行きます！」と即答", next: "alice_route_good", effects: { alice: 15 } },
-                    { id: "B", text: "「考えてみます」と保留", next: "scene3_mixed", effects: { alice: -5 } },
-                    { id: "C", text: "「みんなで行きませんか？」", next: "scene3_group", effects: { alice: 5, sakura: 5 } }
-                  ]
-                },
-                
-                scene2_rin: {
-                  text: `
-━━━━━━━━━━━━━━━━━━━━━━
-📅 Day 5 - コードレビュー
-━━━━━━━━━━━━━━━━━━━━━━
-
-あなたの初めてのPull Requestに、
-凛から大量のコメントが付いた。
-
-「変数名が不適切。ここはリファクタリングが必要」
-「このロジック、もっとシンプルに書けるはず」
-
-厳しい指摘が続く...
-
-     ∧＿∧
-    (  ･_･)  < でも... 悪くない構造だね
-    /    つ
-   しーJ
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-「最後に一つ」
-
-凛が真剣な表情で言った。
-
-「このエラーハンドリング、よく考えられている。
- ...あなた、才能あるかもしれない」
-
-小さく笑う凛。初めて見る彼女の笑顔だった。
-
-━━━━━━━━━━━━━━━━━━━━━━
-`,
-                  choices: [
-                    { id: "A", text: "「もっと教えてください！」", next: "rin_route_good", effects: { rin: 20 } },
-                    { id: "B", text: "「ありがとうございます」と謙遜", next: "scene3_mixed", effects: { rin: 8 } },
-                    { id: "C", text: "「一緒にコード書きませんか？」", next: "scene3_bold", effects: { rin: 12 } }
-                  ]
-                },
-                
-                alice_route_good: {
-                  text: `
-━━━━━━━━━━━━━━━━━━━━━━
-📅 土曜日 - 技術書読書会
-━━━━━━━━━━━━━━━━━━━━━━
-
-カフェでアリスと二人。
-窓の外は夕暮れ時。
-
-「Clean Code、この章好きなんだ」
-
-アリスが嬉しそうに話す。
-コーヒーカップを持つ手が少し震えている。
-
-     ∧＿∧
-    (  ･ω･*)  < あの、さ...
-    /    つ☕
-   しーJ
-
-「実は... 君とコード書くの、すごく楽しいの。
- これからも、一緒にいい開発者になりたいな」
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-💕 アリス TRUE END 💕
-
-あなたとアリスは最高のペアプログラミングパートナーに。
-半年後、二人で共同OSS プロジェクト
-「CodeWithLove」を立ち上げた。
-
-GitHub Sponsors: ★★★★★
-Contributors: 150+
-Stars: 5,000+
-
-そして、コミット履歴には
-いつも二人の名前が並んでいる...
-
-━━━━━━━━━━━━━━━━━━━━━━
-🎊 CONGRATULATIONS! 🎊
-Alice True Ending Unlocked!
-━━━━━━━━━━━━━━━━━━━━━━
-`,
-                  choices: [
-                    { id: "END", text: "🔄 もう一度プレイする", next: "start", effects: {} }
-                  ]
-                },
-                
-                rin_route_good: {
-                  text: `
-━━━━━━━━━━━━━━━━━━━━━━
-📅 3ヶ月後 - 新アーキテクチャ設計
-━━━━━━━━━━━━━━━━━━━━━━
-
-深夜のオフィス。
-あなたと凛だけが残っている。
-
-ホワイトボードには複雑な設計図。
-
-     ∧＿∧
-    (  ･_･)  < この設計... 完璧だ
-    /    つ📐
-   しーJ
-
-「君となら、どんな難しいシステムも作れる気がする」
-
-凛が珍しく柔らかい表情で言った。
-
-「正直、最初は期待してなかった。
- でも今は... 君が一番信頼できるエンジニアだ」
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-💕 凛 TRUE END 💕
-
-あなたと凛は、会社の新しいマイクロサービス
-アーキテクチャを一から設計。
-
-プロジェクトは大成功！
-
-Tech Conference での発表: 3回
-執筆した技術記事: 12本
-獲得したGitHub Stars: 10,000+
-
-二人で書いた設計書は、
-社内のバイブルとなった。
-
-━━━━━━━━━━━━━━━━━━━━━━
-🎊 CONGRATULATIONS! 🎊
-Rin True Ending Unlocked!
-━━━━━━━━━━━━━━━━━━━━━━
-`,
-                  choices: [
-                    { id: "END", text: "🔄 もう一度プレイする", next: "start", effects: {} }
-                  ]
-                }
+              sakura1: {
+                text: `## 🌸 さくらルート - Day 1
+            
+            「よろしくお願いします！」
+            
+            あなたの元気な挨拶に、さくらの笑顔が輝いた。
+            
+            \`\`\`
+              ∧＿∧
+             (*ﾟ∀ﾟ*)  < その意気だね！一緒に頑張ろう！
+             /    つ🎉
+            しーJ
+            \`\`\`
+            
+            「ねえねえ、今日のタスク一緒にやらない？
+             実は私、まだちょっと不安で...」
+            
+            さくらは少し照れくさそうに言った。
+            
+            ━━━━━━━━━━━━━━━━━━━━━━
+            📊 **好感度アップ！** さくら: +10 ❤️
+            ━━━━━━━━━━━━━━━━━━━━━━`,
+                choices: [
+                  { id: 'A', text: '😄 もちろん！一緒にやろう', next: 'sakura2' },
+                  { id: 'B', text: '🤝 お互い助け合おう', next: 'sakura2' },
+                  { id: 'C', text: '😅 まずは一人でやってみる', next: 'neutral' }
+                ]
+              },
+              
+              alice1: {
+                text: `## 💻 アリスルート - Day 1
+            
+            「はじめまして。よろしくお願いします」
+            
+            落ち着いた挨拶に、アリスは優しく微笑んだ。
+            
+            \`\`\`
+              ∧＿∧
+             (  ･ω･)  < しっかりしてるね。期待できそう
+             /    つ☕
+            しーJ
+            \`\`\`
+            
+            「環境構築、一緒にやろうか？
+             詰まったところがあったら、いつでも聞いてね」
+            
+            アリスの声は穏やかで安心感がある。
+            
+            ━━━━━━━━━━━━━━━━━━━━━━
+            📊 **好感度アップ！** アリス: +10 ❤️
+            ━━━━━━━━━━━━━━━━━━━━━━`,
+                choices: [
+                  { id: 'A', text: '🙏 お願いします！', next: 'alice2' },
+                  { id: 'B', text: '📚 少しだけヒントください', next: 'alice2' },
+                  { id: 'C', text: '💪 自分で頑張ります', next: 'neutral' }
+                ]
+              },
+              
+              rin1: {
+                text: `## 💎 凛ルート - Day 1
+            
+            「よろしくお願いします」
+            
+            あなたのしっかりした挨拶に、凛は少し驚いた様子。
+            
+            \`\`\`
+              ∧＿∧
+             (  ･_･)  < ...礼儀正しいね。悪くない
+             /    つ
+            しーJ
+            \`\`\`
+            
+            「まずはコーディング規約を読んで。
+             私のチームでは、品質には一切妥協しない」
+            
+            凛の視線は厳しいが、どこか期待も感じる。
+            
+            ━━━━━━━━━━━━━━━━━━━━━━
+            📊 **好感度アップ！** 凛: +10 ❤️
+            ━━━━━━━━━━━━━━━━━━━━━━`,
+                choices: [
+                  { id: 'A', text: '🔥 はい、しっかり学びます！', next: 'rin2' },
+                  { id: 'B', text: '📖 質問してもいいですか？', next: 'rin2' },
+                  { id: 'C', text: '😰 頑張ります...', next: 'neutral' }
+                ]
+              },
+              
+              sakura2: {
+                text: `## 🌸 さくらルート - 1週間後
+            
+            さくらとのペアワークは順調だ。
+            
+            \`\`\`
+              ∧＿∧
+             (* ﾟ∀ﾟ)  < あなたと一緒だと、楽しいな！
+             /    つ💕
+            しーJ
+            \`\`\`
+            
+            「ねえ、今度の休日さ...
+             ハッカソン一緒に出ない？二人なら優勝できそう！」
+            
+            ━━━━━━━━━━━━━━━━━━━━━━
+            💕 **GOOD ENDING - さくらルート**
+            
+            あなたとさくらは最強のペアに！
+            ハッカソンで優勝し、二人で起業した。
+            
+            🏆 スタートアップ成功
+            💰 資金調達: $5M
+            ⭐ GitHub Stars: 10,000+
+            
+            \`さくらとの幸せな開発ライフ\`
+            ━━━━━━━━━━━━━━━━━━━━━━
+            
+            🎊 **CONGRATULATIONS!**
+            🎮 もう一度プレイするには新しいIssueを作成してね！`,
+                choices: []
+              },
+              
+              alice2: {
+                text: `## 💻 アリスルート - 2週間後
+            
+            アリスとのコードレビューは刺激的だ。
+            
+            \`\`\`
+              ∧＿∧
+             (  ･ω･*)  < あなたのコード、すごく読みやすい
+             /    つ✨
+            しーJ
+            \`\`\`
+            
+            「実は... 今度技術書の出版社から声がかかってて。
+             共著で書きませんか？あなたとなら、いい本が書けそう」
+            
+            ━━━━━━━━━━━━━━━━━━━━━━
+            💕 **TRUE ENDING - アリスルート**
+            
+            あなたとアリスは共著で技術書を出版！
+            
+            📚 「美しいコードの書き方」
+            ⭐ Amazon評価: 4.8/5.0
+            📊 販売部数: 50,000冊
+            🎤 Tech Conference登壇: 10回
+            
+            \`アリスとの完璧なパートナーシップ\`
+            ━━━━━━━━━━━━━━━━━━━━━━
+            
+            🎊 **TRUE END UNLOCKED!**
+            🎮 もう一度プレイするには新しいIssueを作成してね！`,
+                choices: []
+              },
+              
+              rin2: {
+                text: `## 💎 凛ルート - 1ヶ月後
+            
+            凛のコードレビューは厳しかった。
+            でも、あなたは成長した。
+            
+            \`\`\`
+              ∧＿∧
+             (  ･_･)  < ...認めよう。君は本物だ
+             /    つ🏆
+            しーJ
+            \`\`\`
+            
+            「新アーキテクチャの設計、一緒にやらないか。
+             君なら... 私の理想を理解してくれる」
+            
+            凛が初めて見せた、本当の笑顔。
+            
+            ━━━━━━━━━━━━━━━━━━━━━━
+            💕 **TRUE ENDING - 凛ルート**
+            
+            あなたと凛は革新的なアーキテクチャを設計！
+            
+            🏗️ 「Zero-Downtime Migration」
+            🌟 業界標準として採用
+            📰 Tech雑誌の表紙を飾る
+            💼 ともにCTOに昇進
+            
+            \`凛との完璧な技術パートナーシップ\`
+            ━━━━━━━━━━━━━━━━━━━━━━
+            
+            🎊 **TRUE END UNLOCKED!**
+            🎮 もう一度プレイするには新しいIssueを作成してね！`,
+                choices: []
+              },
+              
+              neutral: {
+                text: `## 😐 ノーマルエンド
+            
+            あなたは無難に仕事をこなした。
+            特に親しい関係は築けなかったが、
+            悪くない会社員生活を送っている。
+            
+            ━━━━━━━━━━━━━━━━━━━━━━
+            📊 **NORMAL ENDING**
+            
+            普通の開発者として平和に過ごした。
+            
+            🎮 もう一度挑戦してみる？
+            別のルートで違うエンディングが見られるかも！
+            ━━━━━━━━━━━━━━━━━━━━━━`,
+                choices: []
               }
             };
-            
-            // ========================================
-            // ゲームエンジン
-            // ========================================
             
             const issueNumber = context.issue.number;
-            const issueBody = context.payload.issue.body || '';
+            const isNewGame = context.payload.action === 'opened';
             const comment = context.payload.comment?.body || '';
             
-            // ゲーム状態の取得（Issueの本文から）
-            let gameState = {
-              currentScene: 'start',
-              choices: {},
-              favorability: { alice: 0, sakura: 0, rin: 0 },
-              playCount: 0
-            };
-            
-            // コメントから選択肢を解析
-            let choice = null;
-            if (comment) {
-              const match = comment.match(/選択肢\s*[：:]\s*([ABC])/i) || 
-                           comment.match(/^([ABC])$/i);
-              if (match) {
-                choice = match[1].toUpperCase();
-              }
-            }
-            
-            // ゲーム開始
-            if (context.payload.action === 'opened' || context.payload.action === 'labeled') {
-              const scene = gameData.scenes.start;
+            if (isNewGame) {
+              console.log('New game started!');
+              const scene = scenes.start;
+              const choicesText = scene.choices.map(c => 
+                `**選択肢 ${c.id}**: ${c.text}`
+              ).join('\n');
+              
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: issueNumber,
-                body: scene.text + '\n\n' + scene.choices.map(c => 
-                  `**選択肢 ${c.id}**: ${c.text}`
-                ).join('\n') + '\n\n---\n💬 コメントで「選択肢：A」のように答えてください！'
+                body: `${scene.text}\n\n━━━━━━━━━━━━━━━━━━━━━━\n\n${choicesText}\n\n━━━━━━━━━━━━━━━━━━━━━━\n\n💬 **コメントで選択してください！**\n例: \`選択肢：A\` または \`A\``
               });
               return;
             }
             
-            // 選択肢の処理
-            if (choice && context.payload.action === 'created') {
-              // 現在のシーンを特定（最後のBotコメントから）
-              const comments = await github.rest.issues.listComments({
+            const choiceMatch = comment.match(/選択肢[：:]\s*([ABC])/i) || 
+                               comment.match(/^([ABC])$/i) ||
+                               comment.match(/\[([ABC)]\]/i);
+            
+            if (!choiceMatch) {
+              console.log('No valid choice found');
+              return;
+            }
+            
+            const choice = choiceMatch[1].toUpperCase();
+            console.log(`Choice selected: ${choice}`);
+            
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              per_page: 100
+            });
+            
+            let currentSceneKey = 'start';
+            const botComments = comments.data.filter(c => c.user.type === 'Bot');
+            if (botComments.length > 0) {
+              const lastComment = botComments[botComments.length - 1].body;
+              if (lastComment.includes('さくらルート - Day 1')) currentSceneKey = 'sakura1';
+              else if (lastComment.includes('アリスルート - Day 1')) currentSceneKey = 'alice1';
+              else if (lastComment.includes('凛ルート - Day 1')) currentSceneKey = 'rin1';
+            }
+            
+            const currentScene = scenes[currentSceneKey];
+            if (!currentScene) {
+              console.log('Scene not found');
+              return;
+            }
+            
+            const selectedChoice = currentScene.choices.find(c => c.id === choice);
+            if (!selectedChoice) {
+              await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: issueNumber
+                issue_number: issueNumber,
+                body: '❌ 無効な選択肢です。A、B、C のいずれかを選んでください。'
               });
-              
-              // シーンを進める処理
-              // （簡略化のため、startシーンからの選択として処理）
-              const currentScene = gameData.scenes.start;
-              const selectedChoice = currentScene.choices.find(c => c.id === choice);
-              
-              if (selectedChoice) {
-                const nextScene = gameData.scenes[selectedChoice.next];
-                if (nextScene) {
-                  await github.rest.issues.createComment({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    issue_number: issueNumber,
-                    body: nextScene.text + '\n\n' + 
-                          (nextScene.choices ? nextScene.choices.map(c => 
-                            `**選択肢 ${c.id}**: ${c.text}`
-                          ).join('\n') + '\n\n---\n💬 次の選択をしてください！' : '')
-                  });
-                  
-                  // 好感度の更新
-                  if (selectedChoice.effects) {
-                    let favText = '\n\n📊 **好感度の変化**\n';
-                    for (const [char, value] of Object.entries(selectedChoice.effects)) {
-                      favText += `- ${gameData.characters[char].name}: ${value > 0 ? '+' : ''}${value}\n`;
-                    }
-                    await github.rest.issues.createComment({
-                      owner: context.repo.owner,
-                      repo: context.repo.repo,
-                      issue_number: issueNumber,
-                      body: favText
-                    });
-                  }
-                }
-              } else {
-                await github.rest.issues.createComment({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: issueNumber,
-                  body: '❌ 無効な選択肢です。A、B、C のいずれかを選んでください。'
-                });
-              }
+              return;
             }
+            
+            const nextScene = scenes[selectedChoice.next];
+            if (!nextScene) {
+              console.log('Next scene not found');
+              return;
+            }
+            
+            const choicesText = nextScene.choices.length > 0 ? 
+              '\n\n━━━━━━━━━━━━━━━━━━━━━━\n\n' +
+              nextScene.choices.map(c => `**選択肢 ${c.id}**: ${c.text}`).join('\n') +
+              '\n\n━━━━━━━━━━━━━━━━━━━━━━\n\n💬 **次の選択をしてください！**' : '';
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: nextScene.text + choicesText
+            });
+            
+            console.log('Scene updated successfully!');
