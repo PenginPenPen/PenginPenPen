@@ -1,9 +1,8 @@
-# .github/workflows/dating-sim.yml
-name: "💝 Dating Sim Game"
+name: "💝 Dating Sim Game - AURORA"
 
 on:
   issues:
-    types: [opened]
+    types: [opened, labeled]
   issue_comment:
     types: [created]
 
@@ -14,372 +13,893 @@ permissions:
 jobs:
   game:
     runs-on: ubuntu-latest
-    if: contains(github.event.issue.labels.*.name, 'game') || startsWith(github.event.issue.title, '[GAME]')
-    
+
+    # [GAME] タイトル or gameラベル
+    # labeledイベント時も含めて判定（label付与で開始できる）
+    if: |
+      (github.event_name == 'issues' && (
+        startsWith(github.event.issue.title, '[GAME]') ||
+        contains(github.event.issue.labels.*.name, 'game')
+      )) ||
+      (github.event_name == 'issue_comment' && (
+        startsWith(github.event.issue.title, '[GAME]') ||
+        contains(github.event.issue.labels.*.name, 'game')
+      ))
+
     steps:
-      - name: Game Engine
+      - name: AURORA Engine
         uses: actions/github-script@v7
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            console.log('🎮 Game started!');
-            
-            const scenes = {
-              start: {
-                text: `# 💝 Code Love Story
-            
-            ━━━━━━━━━━━━━━━━━━━━━━
-            ようこそ、TechStartup社へ！
-            ━━━━━━━━━━━━━━━━━━━━━━
-            
-            あなたは新人エンジニアとして入社した。
-            初出社の朝、オフィスで3人の女性エンジニアと出会う...
-            
-            ---
-            
-            ## 👋 出会い
-            
-            「おはよう！新人さん？」
-            
-            明るい声が聞こえた。振り向くと...
-            
-            \`\`\`
-              ∧＿∧
-             (* ﾟ∀ﾟ)  < 私はさくら！同期だよ
-             /    つ
-            しーJ
-            \`\`\`
-            
-            **さくら・デバッグ** (同期エンジニア)
-            元気で明るい性格。一緒に成長していける！
-            
-            ---
-            
-            その隣には...
-            
-            \`\`\`
-              ∧＿∧
-             (  ･ω･)  < 私はアリス。先輩だよ
-             /    つ
-            しーJ
-            \`\`\`
-            
-            **アリス・コードウェル** (先輩エンジニア)
-            優しくて面倒見がいい。コードレビューが丁寧。
-            
-            ---
-            
-            そして、奥から凛とした女性が...
-            
-            \`\`\`
-              ∧＿∧
-             (  ･_･)  < 凛だ。技術リードをしている
-             /    つ📐
-            しーJ
-            \`\`\`
-            
-            **凛・アーキテクト** (技術リード)
-            クールで完璧主義。でも実は優しい。
-            
-            ━━━━━━━━━━━━━━━━━━━━━━
-            
-            さて、最初に話しかけるのは...？`,
-                choices: [
-                  { id: 'A', text: '😊 さくらに元気よく挨拶', next: 'sakura1' },
-                  { id: 'B', text: '🌟 アリスに丁寧に挨拶', next: 'alice1' },
-                  { id: 'C', text: '💎 凛にしっかり挨拶', next: 'rin1' }
-                ]
-              },
-              
-              sakura1: {
-                text: `## 🌸 さくらルート - Day 1
-            
-            「よろしくお願いします！」
-            
-            あなたの元気な挨拶に、さくらの笑顔が輝いた。
-            
-            \`\`\`
-              ∧＿∧
-             (*ﾟ∀ﾟ*)  < その意気だね！一緒に頑張ろう！
-             /    つ🎉
-            しーJ
-            \`\`\`
-            
-            「ねえねえ、今日のタスク一緒にやらない？
-             実は私、まだちょっと不安で...」
-            
-            さくらは少し照れくさそうに言った。
-            
-            ━━━━━━━━━━━━━━━━━━━━━━
-            📊 **好感度アップ！** さくら: +10 ❤️
-            ━━━━━━━━━━━━━━━━━━━━━━`,
-                choices: [
-                  { id: 'A', text: '😄 もちろん！一緒にやろう', next: 'sakura2' },
-                  { id: 'B', text: '🤝 お互い助け合おう', next: 'sakura2' },
-                  { id: 'C', text: '😅 まずは一人でやってみる', next: 'neutral' }
-                ]
-              },
-              
-              alice1: {
-                text: `## 💻 アリスルート - Day 1
-            
-            「はじめまして。よろしくお願いします」
-            
-            落ち着いた挨拶に、アリスは優しく微笑んだ。
-            
-            \`\`\`
-              ∧＿∧
-             (  ･ω･)  < しっかりしてるね。期待できそう
-             /    つ☕
-            しーJ
-            \`\`\`
-            
-            「環境構築、一緒にやろうか？
-             詰まったところがあったら、いつでも聞いてね」
-            
-            アリスの声は穏やかで安心感がある。
-            
-            ━━━━━━━━━━━━━━━━━━━━━━
-            📊 **好感度アップ！** アリス: +10 ❤️
-            ━━━━━━━━━━━━━━━━━━━━━━`,
-                choices: [
-                  { id: 'A', text: '🙏 お願いします！', next: 'alice2' },
-                  { id: 'B', text: '📚 少しだけヒントください', next: 'alice2' },
-                  { id: 'C', text: '💪 自分で頑張ります', next: 'neutral' }
-                ]
-              },
-              
-              rin1: {
-                text: `## 💎 凛ルート - Day 1
-            
-            「よろしくお願いします」
-            
-            あなたのしっかりした挨拶に、凛は少し驚いた様子。
-            
-            \`\`\`
-              ∧＿∧
-             (  ･_･)  < ...礼儀正しいね。悪くない
-             /    つ
-            しーJ
-            \`\`\`
-            
-            「まずはコーディング規約を読んで。
-             私のチームでは、品質には一切妥協しない」
-            
-            凛の視線は厳しいが、どこか期待も感じる。
-            
-            ━━━━━━━━━━━━━━━━━━━━━━
-            📊 **好感度アップ！** 凛: +10 ❤️
-            ━━━━━━━━━━━━━━━━━━━━━━`,
-                choices: [
-                  { id: 'A', text: '🔥 はい、しっかり学びます！', next: 'rin2' },
-                  { id: 'B', text: '📖 質問してもいいですか？', next: 'rin2' },
-                  { id: 'C', text: '😰 頑張ります...', next: 'neutral' }
-                ]
-              },
-              
-              sakura2: {
-                text: `## 🌸 さくらルート - 1週間後
-            
-            さくらとのペアワークは順調だ。
-            
-            \`\`\`
-              ∧＿∧
-             (* ﾟ∀ﾟ)  < あなたと一緒だと、楽しいな！
-             /    つ💕
-            しーJ
-            \`\`\`
-            
-            「ねえ、今度の休日さ...
-             ハッカソン一緒に出ない？二人なら優勝できそう！」
-            
-            ━━━━━━━━━━━━━━━━━━━━━━
-            💕 **GOOD ENDING - さくらルート**
-            
-            あなたとさくらは最強のペアに！
-            ハッカソンで優勝し、二人で起業した。
-            
-            🏆 スタートアップ成功
-            💰 資金調達: $5M
-            ⭐ GitHub Stars: 10,000+
-            
-            \`さくらとの幸せな開発ライフ\`
-            ━━━━━━━━━━━━━━━━━━━━━━
-            
-            🎊 **CONGRATULATIONS!**
-            🎮 もう一度プレイするには新しいIssueを作成してね！`,
-                choices: []
-              },
-              
-              alice2: {
-                text: `## 💻 アリスルート - 2週間後
-            
-            アリスとのコードレビューは刺激的だ。
-            
-            \`\`\`
-              ∧＿∧
-             (  ･ω･*)  < あなたのコード、すごく読みやすい
-             /    つ✨
-            しーJ
-            \`\`\`
-            
-            「実は... 今度技術書の出版社から声がかかってて。
-             共著で書きませんか？あなたとなら、いい本が書けそう」
-            
-            ━━━━━━━━━━━━━━━━━━━━━━
-            💕 **TRUE ENDING - アリスルート**
-            
-            あなたとアリスは共著で技術書を出版！
-            
-            📚 「美しいコードの書き方」
-            ⭐ Amazon評価: 4.8/5.0
-            📊 販売部数: 50,000冊
-            🎤 Tech Conference登壇: 10回
-            
-            \`アリスとの完璧なパートナーシップ\`
-            ━━━━━━━━━━━━━━━━━━━━━━
-            
-            🎊 **TRUE END UNLOCKED!**
-            🎮 もう一度プレイするには新しいIssueを作成してね！`,
-                choices: []
-              },
-              
-              rin2: {
-                text: `## 💎 凛ルート - 1ヶ月後
-            
-            凛のコードレビューは厳しかった。
-            でも、あなたは成長した。
-            
-            \`\`\`
-              ∧＿∧
-             (  ･_･)  < ...認めよう。君は本物だ
-             /    つ🏆
-            しーJ
-            \`\`\`
-            
-            「新アーキテクチャの設計、一緒にやらないか。
-             君なら... 私の理想を理解してくれる」
-            
-            凛が初めて見せた、本当の笑顔。
-            
-            ━━━━━━━━━━━━━━━━━━━━━━
-            💕 **TRUE ENDING - 凛ルート**
-            
-            あなたと凛は革新的なアーキテクチャを設計！
-            
-            🏗️ 「Zero-Downtime Migration」
-            🌟 業界標準として採用
-            📰 Tech雑誌の表紙を飾る
-            💼 ともにCTOに昇進
-            
-            \`凛との完璧な技術パートナーシップ\`
-            ━━━━━━━━━━━━━━━━━━━━━━
-            
-            🎊 **TRUE END UNLOCKED!**
-            🎮 もう一度プレイするには新しいIssueを作成してね！`,
-                choices: []
-              },
-              
-              neutral: {
-                text: `## 😐 ノーマルエンド
-            
-            あなたは無難に仕事をこなした。
-            特に親しい関係は築けなかったが、
-            悪くない会社員生活を送っている。
-            
-            ━━━━━━━━━━━━━━━━━━━━━━
-            📊 **NORMAL ENDING**
-            
-            普通の開発者として平和に過ごした。
-            
-            🎮 もう一度挑戦してみる？
-            別のルートで違うエンディングが見られるかも！
-            ━━━━━━━━━━━━━━━━━━━━━━`,
-                choices: []
-              }
-            };
-            
+            // =========================================================
+            // AURORA Dating Sim Engine
+            // 『コードは嘘をつかない、でも人は』
+            // - State is persisted in the bot comments via hidden marker.
+            // =========================================================
+
+            const owner = context.repo.owner;
+            const repo  = context.repo.repo;
             const issueNumber = context.issue.number;
-            const isNewGame = context.payload.action === 'opened';
-            const comment = context.payload.comment?.body || '';
-            
-            if (isNewGame) {
-              console.log('New game started!');
-              const scene = scenes.start;
-              const choicesText = scene.choices.map(c => 
-                `**選択肢 ${c.id}**: ${c.text}`
-              ).join('\n');
-              
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: issueNumber,
-                body: `${scene.text}\n\n━━━━━━━━━━━━━━━━━━━━━━\n\n${choicesText}\n\n━━━━━━━━━━━━━━━━━━━━━━\n\n💬 **コメントで選択してください！**\n例: \`選択肢：A\` または \`A\``
+
+            const eventName = context.eventName;
+            const action = context.payload.action;
+            const isIssueEvent = eventName === 'issues';
+            const isCommentEvent = eventName === 'issue_comment';
+
+            const commentBody = context.payload.comment?.body ?? '';
+            const commentAuthorType = context.payload.comment?.user?.type ?? '';
+            const isFromBot = commentAuthorType === 'Bot';
+
+            // Prevent accidental loops if a different token is ever used
+            if (isCommentEvent && isFromBot) return;
+
+            // If labeled event: only start when "game" label was added, otherwise ignore.
+            if (isIssueEvent && action === 'labeled') {
+              const added = context.payload.label?.name;
+              if (added !== 'game' && !context.payload.issue.title.startsWith('[GAME]')) return;
+            }
+
+            // --------------------------
+            // Helpers
+            // --------------------------
+            const clamp = (v, min=0, max=100) => Math.max(min, Math.min(max, v));
+
+            const STATE_MARKER = 'AURORA_STATE:';
+
+            function renderState(state) {
+              const s = state.flags;
+              const done = state.progress;
+              return [
+                `\n---`,
+                `### 📊 Status`,
+                `- WORK_PRIORITY: **${s.WORK_PRIORITY}**`,
+                `- EMPATHY: **${s.EMPATHY}**`,
+                `- TRUST_MISAKI: **${s.TRUST_MISAKI}**`,
+                `- TRUST_HIYORI: **${s.TRUST_HIYORI}**`,
+                `- TRUST_RIN: **${s.TRUST_RIN}**`,
+                `- MENTAL: **${s.MENTAL}**`,
+                `- PROJECT_STABILITY: **${s.PROJECT_STABILITY}**`,
+                ``,
+                `### 🏁 Clear Flags (within this issue)`,
+                `- Misaki TRUE: **${done.misakiTrue ? '✅' : '—'}**`,
+                `- Hiyori TRUE: **${done.hiyoriTrue ? '✅' : '—'}**`,
+                `- Rin TRUE: **${done.rinTrue ? '✅' : '—'}**`,
+                `- Final (鬱): **${done.finalGloom ? '✅' : '—'}**`,
+                `- Final (救済): **${done.finalRescue ? '✅' : '—'}**`,
+              ].join('\n');
+            }
+
+            function stateToHidden(state) {
+              // Keep it compact but readable
+              const json = JSON.stringify(state);
+              return `\n\n<!-- ${STATE_MARKER}${json} -->`;
+            }
+
+            function parseHiddenStateFromBody(body) {
+              const re = new RegExp(`<!--\\s*${STATE_MARKER}([\\s\\S]*?)\\s*-->`, 'm');
+              const m = body.match(re);
+              if (!m) return null;
+              try { return JSON.parse(m[1]); } catch { return null; }
+            }
+
+            async function getLastBotState() {
+              const comments = await github.rest.issues.listComments({
+                owner, repo, issue_number: issueNumber, per_page: 100
               });
-              return;
+
+              // Find last comment that contains our marker
+              for (let i = comments.data.length - 1; i >= 0; i--) {
+                const c = comments.data[i];
+                if (c.user?.type !== 'Bot') continue;
+                const st = parseHiddenStateFromBody(c.body || '');
+                if (st) return st;
+              }
+              return null;
             }
-            
-            const choiceMatch = comment.match(/選択肢[：:]\s*([ABC])/i) || 
-                               comment.match(/^([ABC])$/i) ||
-                               comment.match(/\[([ABC)]\]/i);
-            
-            if (!choiceMatch) {
-              console.log('No valid choice found');
-              return;
-            }
-            
-            const choice = choiceMatch[1].toUpperCase();
-            console.log(`Choice selected: ${choice}`);
-            
-            const comments = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issueNumber,
-              per_page: 100
-            });
-            
-            let currentSceneKey = 'start';
-            const botComments = comments.data.filter(c => c.user.type === 'Bot');
-            if (botComments.length > 0) {
-              const lastComment = botComments[botComments.length - 1].body;
-              if (lastComment.includes('さくらルート - Day 1')) currentSceneKey = 'sakura1';
-              else if (lastComment.includes('アリスルート - Day 1')) currentSceneKey = 'alice1';
-              else if (lastComment.includes('凛ルート - Day 1')) currentSceneKey = 'rin1';
-            }
-            
-            const currentScene = scenes[currentSceneKey];
-            if (!currentScene) {
-              console.log('Scene not found');
-              return;
-            }
-            
-            const selectedChoice = currentScene.choices.find(c => c.id === choice);
-            if (!selectedChoice) {
+
+            async function post(body) {
               await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: issueNumber,
-                body: '❌ 無効な選択肢です。A、B、C のいずれかを選んでください。'
+                owner, repo, issue_number: issueNumber, body
               });
+            }
+
+            function defaultState() {
+              return {
+                scene: 'CH0_PROLOGUE',
+                route: null, // 'MISAKI' | 'HIYORI' | 'RIN'
+                flags: {
+                  WORK_PRIORITY: 50,
+                  EMPATHY: 50,
+                  TRUST_MISAKI: 0,
+                  TRUST_HIYORI: 0,
+                  TRUST_RIN: 0,
+                  MENTAL: 60,
+                  PROJECT_STABILITY: 60,
+                },
+                meta: {
+                  // For secret rescue condition
+                  protectCount: 0,
+                  harshCount: 0,
+                },
+                progress: {
+                  misakiTrue: false,
+                  hiyoriTrue: false,
+                  rinTrue: false,
+                  finalGloom: false,
+                  finalRescue: false,
+                }
+              };
+            }
+
+            function applyDelta(state, delta = {}) {
+              for (const [k, v] of Object.entries(delta)) {
+                if (state.flags[k] === undefined) continue;
+                state.flags[k] = clamp(state.flags[k] + v);
+              }
+            }
+
+            function addProtect(state, kind) {
+              // kind: 'protect' | 'harsh'
+              if (kind === 'protect') state.meta.protectCount++;
+              if (kind === 'harsh') state.meta.harshCount++;
+            }
+
+            function choiceBlock(choices) {
+              return choices.map(c => `**選択肢 ${c.id}**: ${c.text}`).join('\n');
+            }
+
+            function parseChoice(input) {
+              // Accept: "A" / "選択肢：A" / "[A]"
+              const m =
+                input.match(/選択肢[：:]\s*([A-Z])/i) ||
+                input.match(/^\s*([A-Z])\s*$/i) ||
+                input.match(/\[([A-Z])\]/i);
+              return m ? m[1].toUpperCase() : null;
+            }
+
+            // --------------------------
+            // Scenario (expandable)
+            // --------------------------
+            // Note: You can add more scenes freely.
+            // Each scene:
+            // - text: string
+            // - choices: [{id, text, delta?, next, protectKind?}]
+            // - next can be string or function(state)->string
+            const scenes = {
+                // ---------------- 共通ルート ----------------
+                CH0_PROLOGUE: {
+                  text: [
+                    `# 『コードは嘘をつかない、でも人は』`,
+                    ``,
+                    `## Chapter 0：プロローグ`,
+                    ``,
+                    `（暗転。タイプ音だけが響く）`,
+                    ``,
+                    `主人公（モノローグ）`,
+                    `「……まただ」`,
+                    ``,
+                    `画面に赤いログ。`,
+                    ``,
+                    `\`\`\``,
+                    `FATAL ERROR`,
+                    `DATA CORRUPTION DETECTED`,
+                    `\`\`\``,
+                    ``,
+                    `主人公`,
+                    `「バックアップは……ない」`,
+                    ``,
+                    `背後に誰かの気配はない。`,
+                    `オフィスは深夜。照明は半分落ちている。`,
+                    ``,
+                    `主人公`,
+                    `「俺は……正しいコードを書いたはずだった」`,
+                    ``,
+                    `（画面ノイズ → 巻き戻し）`,
+                  ].join('\n'),
+                  choices: [
+                    { id:'A', text:'時間を巻き戻す', next:'CH1_START' },
+                  ],
+                },
+
+                CH1_START: {
+                  text: [
+                    `## Chapter 1：始動`,
+                    ``,
+                    `朝の会議室。`,
+                    ``,
+                    `美咲`,
+                    `「今日からProject AURORAを正式に始動します」`,
+                    ``,
+                    `ひより`,
+                    `「よろしくお願いしますっ！ UI担当の天野ひよりです！」`,
+                    ``,
+                    `凛`,
+                    `「……セキュリティ監査、外部から入る水瀬凛」`,
+                    ``,
+                    `主人公`,
+                    `（この三人と、俺は仕事をする）`,
+                    ``,
+                    `【選択肢①：会議後】`,
+                  ].join('\n'),
+                  choices: [
+                    { id:'A', text:'美咲に話しかける', delta:{TRUST_MISAKI:+5}, next:'CH1_DESIGN' },
+                    { id:'B', text:'ひよりに話しかける', delta:{TRUST_HIYORI:+5}, next:'CH1_DESIGN' },
+                    { id:'C', text:'凛に話しかける',     delta:{TRUST_RIN:+5},   next:'CH1_DESIGN' },
+                    { id:'D', text:'誰とも話さない',     delta:{MENTAL:-5},      next:'CH1_DESIGN' },
+                  ],
+                },
+
+                CH1_DESIGN: {
+                  text: [
+                    `【選択肢：初期設計方針】`,
+                    ``,
+                    `安定重視 → PROJECT_STABILITY +5 / WORK_PRIORITY +5`,
+                    `革新重視 → PROJECT_STABILITY -5 / 評価UP`,
+                  ].join('\n'),
+                  choices: [
+                    { id:'A', text:'安定重視', delta:{PROJECT_STABILITY:+5, WORK_PRIORITY:+5}, next:'CH2_DAILY' },
+                    { id:'B', text:'革新重視', delta:{PROJECT_STABILITY:-5, WORK_PRIORITY:+10}, next:'CH2_DAILY' },
+                  ],
+                },
+
+                  CH2_DAILY: {
+                    text: [
+                      `## Chapter 2：日常と違和感`,
+                      ``,
+                      `深夜。`,
+                      `主人公の席だけ明かりがついている。`,
+                      ``,
+                      `主人公`,
+                      `「……また仕様変更か」`,
+                      ``,
+                      `美咲（疲れた声）`,
+                      `「ごめんなさい。上からの指示で」`,
+                      ``,
+                      `ひより`,
+                      `「デザイン、間に合わなくて……」`,
+                      ``,
+                      `凛`,
+                      `「この実装、穴だらけ。直して」`,
+                      ``,
+                      `主人公`,
+                      `（誰も悪くない。だが、全部が重い）`,
+                      ``,
+                      `【選択肢②：残業】`,
+                    ].join('\n'),
+                    choices: [
+                      { id:'A', text:'残る', delta:{WORK_PRIORITY:+10, MENTAL:-10}, next:'CH3_DISTORT' },
+                      {
+                        id:'B',
+                        text:'帰る（信頼が落ちる）',
+                        next:(st)=>{
+                          const f = st.flags;
+                          const max = Math.max(f.TRUST_MISAKI, f.TRUST_HIYORI, f.TRUST_RIN);
+                          if (max <= 0) { applyDelta(st, {MENTAL:-5}); return 'CH3_DISTORT'; }
+                          if (max === f.TRUST_MISAKI) applyDelta(st, {TRUST_MISAKI:-5});
+                          else if (max === f.TRUST_HIYORI) applyDelta(st, {TRUST_HIYORI:-5});
+                          else applyDelta(st, {TRUST_RIN:-5});
+                          return 'CH3_DISTORT';
+                        }
+                      },
+                    ],
+                  },
+
+                CH3_DISTORT: {
+                  text: [
+                    `## Chapter 3：歪み`,
+                    ``,
+                    `エラー増加。`,
+                    `Slackの通知音が止まらない。`,
+                    ``,
+                    `美咲`,
+                    `「……少し、頭が痛いだけです」`,
+                    ``,
+                    `主人公`,
+                    `「無理は――」`,
+                    ``,
+                    `美咲`,
+                    `「大丈夫ですから」`,
+                    ``,
+                    `ひより`,
+                    `「最近、空気重くないですか……？」`,
+                    ``,
+                    `凛`,
+                    `「壊れる前兆。いつもこう」`,
+                    ``,
+                    `主人公`,
+                    `（何かが、確実に壊れ始めている）`,
+                    ``,
+                    `【ルート分岐へ進む】`,
+                  ].join('\n'),
+                  choices: [
+                    { id:'A', text:'ルート判定へ', next:'ROUTE_CHECK' },
+                  ],
+                },
+
+                ROUTE_CHECK: {
+                  text: [
+                    `## ルート分岐`,
+                    ``,
+                    `TRUST_MISAKI ≥ 30 → 美咲ルート`,
+                    `TRUST_HIYORI ≥ 30 → ひよりルート`,
+                    `TRUST_RIN ≥ 30 → 凛ルート`,
+                    `どれも満たさない → 共通BAD直行`,
+                  ].join('\n'),
+                  choices: [
+                    { id:'A', text:'判定する', next:(st)=>{
+                      const f = st.flags;
+                      if (f.TRUST_MISAKI >= 30) { st.route='MISAKI'; return 'M1'; }
+                      if (f.TRUST_HIYORI >= 30) { st.route='HIYORI'; return 'H1'; }
+                      if (f.TRUST_RIN >= 30)    { st.route='RIN';    return 'R1'; }
+                      return 'COMMON_BAD';
+                    }},
+                  ],
+                },
+
+                COMMON_BAD: {
+                  text: [
+                    `## 共通BADエンド①`,
+                    `「誰も選ばなかった結果」`,
+                    ``,
+                    `炎上会議。`,
+                    ``,
+                    `上司`,
+                    `「責任は誰が取るんだ？」`,
+                    ``,
+                    `沈黙。`,
+                    ``,
+                    `主人公`,
+                    `「……俺が」`,
+                    ``,
+                    `美咲は俯き、`,
+                    `ひよりは泣き、`,
+                    `凛は席を立つ。`,
+                    ``,
+                    `夜のオフィス。`,
+                    ``,
+                    `主人公`,
+                    `「俺は…正しいコードを書いたはずだった」`,
+                    ``,
+                    `— END —`,
+                    ``,
+                    `> \`RESET\` でやり直し / \`FINAL\` で最終判定`,
+                  ].join('\n'),
+                  choices: [],
+                },
+
+                // ---------------- 美咲ルート ----------------
+                M1: {
+                  text: [
+                    `## 美咲ルート`,
+                    `テーマ：責任の押し付け合い`,
+                    ``,
+                    `### Chapter M-1`,
+                    ``,
+                    `美咲`,
+                    `「あなたがいないと、回らないの」`,
+                    ``,
+                    `主人公`,
+                    `「それは……」`,
+                    ``,
+                    `【選択肢：体調】`,
+                    `美咲の体調不良をどうする？`,
+                  ].join('\n'),
+                  choices: [
+                    { id:'A', text:'休ませる',   delta:{TRUST_MISAKI:+10, PROJECT_STABILITY:-5, EMPATHY:+10}, protectKind:'protect', next:'M_END' },
+                    { id:'B', text:'無理させる', delta:{PROJECT_STABILITY:+5, MENTAL:-10, EMPATHY:-10}, protectKind:'harsh', next:'M_END' },
+                  ],
+                },
+
+                M_END: {
+                  text: `## 美咲ルート：結末判定`,
+                  choices: [
+                    { id:'A', text:'結末へ', next:(st)=>{
+                      const f = st.flags;
+                      // BAD: TRUST_MISAKI < 50 & PROJECT_STABILITY < 40
+                      if (f.TRUST_MISAKI < 50 && f.PROJECT_STABILITY < 40) return 'M_BAD';
+                      // TRUE: TRUST_MISAKI ≥ 70 & MENTAL ≥ 50
+                      if (f.TRUST_MISAKI >= 70 && f.MENTAL >= 50) return 'M_TRUE';
+                      // NORMAL: TRUST_MISAKI ≥ 50 & MENTAL < 40
+                      if (f.TRUST_MISAKI >= 50 && f.MENTAL < 40) return 'M_NORMAL';
+                      return 'M_NORMAL';
+                    }},
+                  ],
+                },
+
+                M_BAD: {
+                  text: [
+                    `## 美咲 BAD END`,
+                    ``,
+                    `病院の前。`,
+                    ``,
+                    `医師`,
+                    `「過労です。限界でした」`,
+                    ``,
+                    `美咲`,
+                    `「あなたも…結局、会社側の人だった」`,
+                    ``,
+                    `主人公`,
+                    `「違う、俺は――」`,
+                    ``,
+                    `美咲`,
+                    `「もういいです」`,
+                    ``,
+                    `（彼女は去る）`,
+                    ``,
+                    `— END —`,
+                    `> \`RESET\` / \`FINAL\``,
+                  ].join('\n'),
+                  choices: [],
+                },
+
+                M_NORMAL: {
+                  text: [
+                    `## 美咲 NORMAL END`,
+                    ``,
+                    `プロジェクト成功発表。`,
+                    `拍手の中。`,
+                    ``,
+                    `美咲`,
+                    `「お疲れ様……」`,
+                    ``,
+                    `主人公`,
+                    `「終わったな」`,
+                    ``,
+                    `（手は繋がっているが、心は空）`,
+                    ``,
+                    `— END —`,
+                    `> \`RESET\` / \`FINAL\``,
+                  ].join('\n'),
+                  choices: [],
+                },
+
+                M_TRUE: {
+                  text: [
+                    `## 美咲 TRUE END`,
+                    ``,
+                    `会議室。`,
+                    ``,
+                    `主人公`,
+                    `「この条件じゃ無理です」`,
+                    ``,
+                    `美咲`,
+                    `「……私も、そう思います」`,
+                    ``,
+                    `二人で反論。`,
+                    `結果、左遷。`,
+                    ``,
+                    `小さなオフィス。`,
+                    ``,
+                    `美咲`,
+                    `「それでも……後悔してません」`,
+                    ``,
+                    `主人公`,
+                    `「俺もだ」`,
+                    ``,
+                    `— TRUE END —`,
+                    `> \`RESET\` / \`FINAL\``,
+                  ].join('\n'),
+                  choices: [],
+                },
+
+                // ---------------- ひよりルート ----------------
+                H1: {
+                  text: [
+                    `## ひよりルート`,
+                    `テーマ：無垢さが壊れる瞬間`,
+                    ``,
+                    `### Chapter H-1`,
+                    ``,
+                    `ひより`,
+                    `「私、向いてないのかな……」`,
+                    ``,
+                    `【選択肢：対応】`,
+                    `ひよりのデザイン失敗`,
+                  ].join('\n'),
+                  choices: [
+                    { id:'A', text:'庇う',     delta:{TRUST_HIYORI:+10, WORK_PRIORITY:-5, EMPATHY:+10}, protectKind:'protect', next:'H_END' },
+                    { id:'B', text:'指摘する', delta:{PROJECT_STABILITY:+5, TRUST_HIYORI:-10, EMPATHY:-10}, protectKind:'harsh', next:'H_END' },
+                  ],
+                },
+
+                H_END: {
+                  text: `## ひよりルート：結末判定`,
+                  choices: [
+                    { id:'A', text:'結末へ', next:(st)=>{
+                      const f = st.flags;
+                      // BAD: TRUST_HIYORI < 40
+                      if (f.TRUST_HIYORI < 40) return 'H_BAD';
+                      // TRUE: TRUST_HIYORI ≥ 70 & EMPATHY ≥ 60
+                      if (f.TRUST_HIYORI >= 70 && f.EMPATHY >= 60) return 'H_TRUE';
+                      // NORMAL: TRUST_HIYORI ≥ 50 & PROJECT_STABILITY ≥ 50
+                      if (f.TRUST_HIYORI >= 50 && f.PROJECT_STABILITY >= 50) return 'H_NORMAL';
+                      return 'H_NORMAL';
+                    }},
+                  ],
+                },
+
+                H_BAD: {
+                  text: [
+                    `## ひより BAD END`,
+                    ``,
+                    `退職メール。`,
+                    ``,
+                    `お世話になりました。`,
+                    ``,
+                    `SNS。`,
+                    ``,
+                    `「才能ある人ほど、冷たい」`,
+                    ``,
+                    `主人公`,
+                    `（胸が、痛い）`,
+                    ``,
+                    `— END —`,
+                    `> \`RESET\` / \`FINAL\``,
+                  ].join('\n'),
+                  choices: [],
+                },
+
+                H_NORMAL: {
+                  text: [
+                    `## ひより NORMAL END`,
+                    ``,
+                    `空港。`,
+                    ``,
+                    `ひより`,
+                    `「海外、行ってきます！」`,
+                    ``,
+                    `主人公`,
+                    `「……頑張れ」`,
+                    ``,
+                    `ひより`,
+                    `「忘れませんから！」`,
+                    ``,
+                    `— END —`,
+                    `> \`RESET\` / \`FINAL\``,
+                  ].join('\n'),
+                  choices: [],
+                },
+
+                H_TRUE: {
+                  text: [
+                    `## ひより TRUE END`,
+                    ``,
+                    `徹夜明け。`,
+                    `完成したUI。`,
+                    ``,
+                    `ひより`,
+                    `「……できた」`,
+                    ``,
+                    `主人公`,
+                    `「ああ」`,
+                    ``,
+                    `ひより`,
+                    `「私、少し大人になれました？」`,
+                    ``,
+                    `主人公`,
+                    `「なったよ」`,
+                    ``,
+                    `— TRUE END —`,
+                    `> \`RESET\` / \`FINAL\``,
+                  ].join('\n'),
+                  choices: [],
+                },
+
+                // ---------------- 凛ルート ----------------
+                R1: {
+                  text: [
+                    `## 凛ルート`,
+                    `テーマ：過去の罪と贖罪`,
+                    ``,
+                    `### Chapter R-1`,
+                    ``,
+                    `凛`,
+                    `「また事故が起きる」`,
+                    ``,
+                    `【選択肢：責任】`,
+                    `セキュリティ事故の責任`,
+                  ].join('\n'),
+                  choices: [
+                    { id:'A', text:'信じる',   delta:{TRUST_RIN:+10, EMPATHY:+10}, protectKind:'protect', next:'R_END' },
+                    { id:'B', text:'ログ提出', delta:{TRUST_RIN:-15, EMPATHY:-10}, protectKind:'harsh', next:'R_END' },
+                  ],
+                },
+
+                R_END: {
+                  text: `## 凛ルート：結末判定`,
+                  choices: [
+                    { id:'A', text:'結末へ', next:(st)=>{
+                      const f = st.flags;
+                      // BAD: TRUST_RIN < 45
+                      if (f.TRUST_RIN < 45) return 'R_BAD';
+                      // TRUE: TRUST_RIN ≥ 70 & EMPATHY ≥ 50
+                      if (f.TRUST_RIN >= 70 && f.EMPATHY >= 50) return 'R_TRUE';
+                      // NORMAL: TRUST_RIN ≥ 50
+                      if (f.TRUST_RIN >= 50) return 'R_NORMAL';
+                      return 'R_NORMAL';
+                    }},
+                  ],
+                },
+
+                R_BAD: {
+                  text: [
+                    `## 凛 BAD END`,
+                    ``,
+                    `ニュース。`,
+                    ``,
+                    `情報流出事件`,
+                    ``,
+                    `主人公`,
+                    `（凛の連絡先は消えている）`,
+                    ``,
+                    `— END —`,
+                    `> \`RESET\` / \`FINAL\``,
+                  ].join('\n'),
+                  choices: [],
+                },
+
+                R_NORMAL: {
+                  text: [
+                    `## 凛 NORMAL END`,
+                    ``,
+                    `凛`,
+                    `「止めた。それだけ」`,
+                    ``,
+                    `主人公`,
+                    `「……そうか」`,
+                    ``,
+                    `凛`,
+                    `「じゃ」`,
+                    ``,
+                    `— END —`,
+                    `> \`RESET\` / \`FINAL\``,
+                  ].join('\n'),
+                  choices: [],
+                },
+
+                R_TRUE: {
+                  text: [
+                    `## 凛 TRUE END`,
+                    ``,
+                    `夜のサーバールーム。`,
+                    ``,
+                    `凛`,
+                    `「過去、私のせいだった」`,
+                    ``,
+                    `主人公`,
+                    `「一人で背負うな」`,
+                    ``,
+                    `二人で告発。`,
+                    `業界から消える。`,
+                    ``,
+                    `駅前。`,
+                    ``,
+                    `凛`,
+                    `「名前、捨てる覚悟ある？」`,
+                    ``,
+                    `主人公`,
+                    `「……ああ」`,
+                    ``,
+                    `— TRUE END —`,
+                    `> \`RESET\` / \`FINAL\``,
+                  ].join('\n'),
+                  choices: [],
+                },
+
+                // ---------------- 最終判定 ----------------
+                FINAL_GATE: {
+                  text: [
+                    `## 最終エンディング判定`,
+                    ``,
+                    `条件：3ヒロイン全TRUE END達成`,
+                    `共通条件：EMPATHY ≥ 70 / MENTAL ≥ 60`,
+                    `救済追加条件：全ルートで「誰かを庇う選択」を優先`,
+                  ].join('\n'),
+                  choices: [
+                    { id:'A', text:'最終章へ', next:(st)=>{
+                      const p = st.progress;
+                      const f = st.flags;
+
+                      const allTrue = p.misakiTrue && p.hiyoriTrue && p.rinTrue;
+                      if (!allTrue) return 'FINAL_LOCKED';
+
+                      const commonOK = (f.EMPATHY >= 70 && f.MENTAL >= 60);
+
+                      // rescue: protectCountがharshCountより十分多い（“優先”を雑に数値化）
+                      const rescueOK = commonOK && (st.meta.protectCount > st.meta.harshCount + 1);
+
+                      if (rescueOK) return 'FINAL_RESCUE';
+                      return commonOK ? 'FINAL_GLOOM' : 'FINAL_GLOOM';
+                    }},
+                  ],
+                },
+
+                FINAL_LOCKED: {
+                  text: [
+                    `## 🔒 最終章は未解放`,
+                    ``,
+                    `3ヒロイン全TRUE ENDが必要です。`,
+                    ``,
+                    `> \`RESET\` で再挑戦 / \`FINAL\` で再判定`,
+                  ].join('\n'),
+                  choices: [],
+                },
+
+                FINAL_GLOOM: {
+                  text: [
+                    `## 最終エンド①（正史・鬱）`,
+                    `「それでも世界は回る」`,
+                    ``,
+                    `主人公は一人。`,
+                    `プロジェクトは別会社に買われる。`,
+                    `ヒロインたちは皆、別の人生へ。`,
+                    ``,
+                    `最後の独白`,
+                    `「正しかった。でも、救えなかった」`,
+                    ``,
+                    `（冒頭のログ画面へ）`,
+                    ``,
+                    `— END —`,
+                  ].join('\n'),
+                  choices: [],
+                },
+
+                FINAL_RESCUE: {
+                  text: [
+                    `## 最終エンド②（隠し救済）`,
+                    `「書き直せないコードはない」`,
+                    ``,
+                    `小さな工房。`,
+                    ``,
+                    `子供`,
+                    `「先生、これ動かない！」`,
+                    ``,
+                    `主人公`,
+                    `「じゃあ一緒に直そう」`,
+                    ``,
+                    `窓の外。`,
+                    `美咲、ひより、凛が時々訪れる。`,
+                    ``,
+                    `主人公（モノローグ）`,
+                    `「書き直せないコードはない」`,
+                    ``,
+                    `— END —`,
+                  ].join('\n'),
+                  choices: [],
+                },
+              };
+
+            // --------------------------
+            // Flow control + commands
+            // --------------------------
+            const COMMAND = commentBody.trim().toUpperCase();
+
+            function handleCommand(state) {
+              if (COMMAND === 'RESET') {
+                // keep progress (踏破) but reset flags/scene
+                const keep = state.progress;
+                const newState = defaultState();
+                newState.progress = keep;
+                return { state: newState, message: `🔄 リセットしました（踏破フラグは保持）` };
+              }
+              if (COMMAND === 'FINAL') {
+                state.scene = 'FINAL_GATE';
+                return { state, message: `🏁 最終章判定へ進みます` };
+              }
+              return null;
+            }
+
+            function markTrueIfAny(state, sceneId) {
+              if (sceneId === 'M_TRUE') state.progress.misakiTrue = true;
+              if (sceneId === 'H_TRUE') state.progress.hiyoriTrue = true;
+              if (sceneId === 'R_TRUE') state.progress.rinTrue = true;
+              if (sceneId === 'FINAL_GLOOM') state.progress.finalGloom = true;
+              if (sceneId === 'FINAL_RESCUE') state.progress.finalRescue = true;
+            }
+
+            function renderScene(state, sceneId) {
+              const scene = scenes[sceneId];
+              if (!scene) {
+                return `❌ シーンが見つかりません: ${sceneId}`;
+              }
+
+              const choices = scene.choices || [];
+              const text = typeof scene.text === 'string' ? scene.text : String(scene.text);
+
+              const choicesText = choices.length
+                ? `\n\n━━━━━━━━━━━━━━━━━━━━━━\n\n${choiceBlock(choices)}\n\n━━━━━━━━━━━━━━━━━━━━━━\n\n💬 **コメントで選択してください**（例: \`A\`）`
+                : `\n\n━━━━━━━━━━━━━━━━━━━━━━\n\n💬 **コマンド**: \`RESET\` / \`FINAL\``;
+
+              return `${text}\n${renderState(state)}${choicesText}${stateToHidden(state)}`;
+            }
+
+            // --------------------------
+            // Main
+            // --------------------------
+            let state = await getLastBotState();
+
+            // Start conditions: issue opened OR labeled "game"
+            if (!state) state = defaultState();
+
+            // If issue opened: start fresh in CH0 (but keep progress if user reopened? Not possible)
+            const isNewGameEvent = isIssueEvent && action === 'opened';
+            const isLabeledStart  = isIssueEvent && action === 'labeled';
+
+            // Commands via comment
+            if (isCommentEvent) {
+              const cmd = handleCommand(state);
+              if (cmd) {
+                // Jump/render
+                const sid = cmd.state.scene;
+                await post(`${cmd.message}\n\n${renderScene(cmd.state, sid)}`);
+                return;
+              }
+            }
+
+            // If it's a start event (opened/labeled), always render the current scene (fresh)
+            if (isNewGameEvent || isLabeledStart) {
+              const sid = state.scene || 'CH0_PROLOGUE';
+              await post(renderScene(state, sid));
               return;
             }
-            
-            const nextScene = scenes[selectedChoice.next];
-            if (!nextScene) {
-              console.log('Next scene not found');
+
+            // If comment event: parse choice and advance
+            if (isCommentEvent) {
+              const choice = parseChoice(commentBody);
+              if (!choice) return;
+
+              const currentId = state.scene || 'CH0_PROLOGUE';
+              const current = scenes[currentId];
+              if (!current) return;
+
+              const entry = (current.choices || []).find(c => c.id === choice);
+              if (!entry) {
+                await post(`❌ 無効な選択肢です。表示された候補から選んでください。\n\n${renderScene(state, currentId)}`);
+                return;
+              }
+
+              // effects
+              if (entry.delta) applyDelta(state, entry.delta);
+              if (entry.protectKind) addProtect(state, entry.protectKind);
+
+              // next scene
+              let nextId = entry.next;
+              if (typeof nextId === 'function') nextId = nextId(state);
+
+              // advance
+              state.scene = nextId;
+
+              // mark true/ending flags
+              markTrueIfAny(state, nextId);
+
+              // auto: if reached a TRUE scene, update progress
+              if (nextId === 'M_TRUE') state.progress.misakiTrue = true;
+              if (nextId === 'H_TRUE') state.progress.hiyoriTrue = true;
+              if (nextId === 'R_TRUE') state.progress.rinTrue = true;
+
+              // Also: if user is at an ending scene, still render it normally.
+              await post(renderScene(state, nextId));
               return;
             }
-            
-            const choicesText = nextScene.choices.length > 0 ? 
-              '\n\n━━━━━━━━━━━━━━━━━━━━━━\n\n' +
-              nextScene.choices.map(c => `**選択肢 ${c.id}**: ${c.text}`).join('\n') +
-              '\n\n━━━━━━━━━━━━━━━━━━━━━━\n\n💬 **次の選択をしてください！**' : '';
-            
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issueNumber,
-              body: nextScene.text + choicesText
-            });
-            
-            console.log('Scene updated successfully!');
+
