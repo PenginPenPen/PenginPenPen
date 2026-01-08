@@ -1,0 +1,36 @@
+name: Blackjack Game
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  play:
+    if: |
+      contains(github.event.issue.labels.*.name, 'blackjack') &&
+      startsWith(github.event.comment.body, '/') &&
+      github.event.comment.user.type != 'Bot'
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run Blackjack
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
+          COMMENT_USER: ${{ github.event.comment.user.login }}
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+        run: python .github/scripts/blackjack.py

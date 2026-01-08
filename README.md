@@ -83,6 +83,16 @@
 </a>
 </p>
 
+## 🃏 Blackjack
+
+Issueコメントでブラックジャックを遊べます。`/blackjack start` で開始！
+
+<p align="center">
+<a href="../../issues/new?template=blackjack.md&labels=blackjack">
+<img src="https://img.shields.io/badge/🃏-ブラックジャックを始める-111111?style=for-the-badge&logo=github" />
+</a>
+</p>
+
 <p align="center">
 <sub>Made with ❤️ and ☕ by PenginPenPen</sub>
 </p>
