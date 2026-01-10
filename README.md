@@ -21,67 +21,6 @@
   <img src="https://profile-counter.glitch.me/PenginPenPen/count.svg" />
 </p>
 
-## 💝 Code Love Story 
-
-<p align="center">
-<img src="https://img.shields.io/badge/💕-Dating_Sim-ff69b4?style=for-the-badge" />
-<img src="https://img.shields.io/badge/🎮-Playable_in_Issues-blue?style=for-the-badge" />
-<img src="https://img.shields.io/badge/⭐-3_Heroines-yellow?style=for-the-badge" />
-</p>
-
-#### 登場キャラクター
-
-<table>
-<tr>
-<td width="33%" align="center">
-
-**美咲**<br>
-🖋️ PM / リードエンジニア
-
-  ( ･ω･) < 進捗、共有して
-  
-責任感が強い<br>上からも現場からも挟まれる
-
-</td>
-<td width="33%" align="center">
-
-**天野ひより**<br>
-🎨 UI/デザイン
-
-  (* ´ω`) < これ…どうかな？
-
-素直でまっすぐ<br>無垢さが揺らいでいく
-
-</td>
-<td width="33%" align="center">
-
-**水瀬凛**<br>
-💎 セキュリティ監査 / 技術リード
-
-  ( ･_･) < ログを見せて
-
-クールで完璧主義<br>過去の罪を抱えている
-
-</td>
-</tr>
-</table>
-
-### 🕹️ 遊び方
-
-1. **[New Issue]** ボタンをクリック
-2. タイトルに `[GAME] あなたの名前` と入力
-3. ラベルに `game` を追加
-4. Issue を作成するとゲームスタート！
-5. **コメントで選択肢を選ぶ**（例：`選択肢：A`）
-6. GitHub Actions が自動でストーリーを進めます
-7. 状態を見たいときは `STATUS`（常時表示は `STATUS ON` / OFFは `STATUS OFF`）
-
-
-<p align="center">
-<a href="../../issues/new?labels=game&title=%5BGAME%5D%20">
-<img src="https://img.shields.io/badge/🎮-ゲームを始める-ff69b4?style=for-the-badge&logo=github" />
-</a>
-</p>
 
 ## 🃏 Blackjack
 
